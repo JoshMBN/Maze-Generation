@@ -8,9 +8,14 @@ public class MazeConstructor : MonoBehaviour
     [SerializeField] private Material mazeMat2;
     [SerializeField] private Material startMat;
     [SerializeField] private Material treasureMat;
+    public float hallWidth{ get; private set; }
+    public int goalRow{ get; private set; }
+    public int goalCol{ get; private set; }
 
     public float placementThreshold = 0.1f;   // chance of empty space
     private MazeMeshGenerator meshGenerator;
+
+    public Node[,] graph;
 
     public int[,] data
     {
@@ -20,6 +25,7 @@ public class MazeConstructor : MonoBehaviour
     void Awake()
     {
         meshGenerator = new MazeMeshGenerator();
+        hallWidth = meshGenerator.width;
 
         // default to walls surrounding a single empty cell
         data = new int[,]
@@ -30,12 +36,33 @@ public class MazeConstructor : MonoBehaviour
         };
     }
 
-    public void GenerateNewMaze(int sizeRows, int sizeCols) {
+    public void GenerateNewMaze(int sizeRows, int sizeCols) 
+    {
+        DisposeOldMaze();
+
         if (sizeRows % 2 == 0 && sizeCols % 2 == 0)
             Debug.LogError("Odd numbers work better for dungeon size.");
 
         data = FromDimensions(sizeRows, sizeCols);
+
+        goalRow = data.GetUpperBound(0) - 1;
+        goalCol = data.GetUpperBound(1) - 1;
+
+        graph = new Node[sizeRows,sizeCols];
+
+        for (int i = 0; i < sizeRows; i++)        
+            for (int j = 0; j < sizeCols; j++)            
+            graph[i, j] = data[i,j] == 0 ? new Node(i, j, true) : new Node(i, j, false);
+
         DisplayMaze();
+    }
+
+    public void DisposeOldMaze()
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Generated");
+        foreach (GameObject go in objects) {
+            Destroy(go);
+        }
     }
 
     void OnGUI() {
