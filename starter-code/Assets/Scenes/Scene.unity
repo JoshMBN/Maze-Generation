@@ -334,8 +334,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 7942145587893454631, guid: 3acd9089311616440a73cc601b75f686, type: 3}
   monsterPrefab: {fileID: 895211356916686346, guid: 4a5adfc433cc02e41a7013931a52b041, type: 3}
-  rows: 37
-  cols: 21
+  rows: 9
+  cols: 11
 --- !u!114 &1943991223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,3 +381,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e287c9e58a7c721469135fbebfa885ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterSpeed: 5
