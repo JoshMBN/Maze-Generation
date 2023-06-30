@@ -189,4 +189,11 @@ public class AIController : MonoBehaviour
         //out of nodes on the open list
         return null;
     }
+
+    public void StopAI()
+    {
+        startRow = -1;
+        startCol = -1;
+        Destroy(monster);
+    }
 }

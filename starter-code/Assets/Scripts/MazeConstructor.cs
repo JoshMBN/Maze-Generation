@@ -22,6 +22,8 @@ public class MazeConstructor : MonoBehaviour
         get; private set;
     }
 
+
+
     void Awake()
     {
         meshGenerator = new MazeMeshGenerator();
@@ -36,7 +38,7 @@ public class MazeConstructor : MonoBehaviour
         };
     }
 
-    public void GenerateNewMaze(int sizeRows, int sizeCols) 
+    public void GenerateNewMaze(int sizeRows, int sizeCols, TriggerEventHandler treasureCallback)
     {
         DisposeOldMaze();
 
@@ -55,6 +57,7 @@ public class MazeConstructor : MonoBehaviour
             graph[i, j] = data[i,j] == 0 ? new Node(i, j, true) : new Node(i, j, false);
 
         DisplayMaze();
+        PlaceGoal(treasureCallback);
     }
 
     public void DisposeOldMaze()
@@ -119,5 +122,19 @@ public class MazeConstructor : MonoBehaviour
 
         MeshRenderer mr = go.AddComponent<MeshRenderer>();
         mr.materials = new Material[2] {mazeMat1, mazeMat2};
+    }
+
+    private void PlaceGoal(TriggerEventHandler treasureCallback)
+    {
+        GameObject treasure = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        treasure.transform.position = new Vector3(goalCol * hallWidth, .5f, goalRow * hallWidth);
+        treasure.name = "Treasure";
+        treasure.tag = "Generated";
+
+        treasure.GetComponent<BoxCollider>().isTrigger = true;
+        treasure.GetComponent<MeshRenderer>().sharedMaterial = treasureMat;
+
+        TriggerEventRouter tc = treasure.AddComponent<TriggerEventRouter>();
+        tc.callback = treasureCallback;
     }
 }
