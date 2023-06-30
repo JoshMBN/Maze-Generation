@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour
         Node treasureNode = constructor.graph[constructor.goalRow, constructor.goalCol];
 
         // Find the path from the player's position to the treasure using AIController's FindPath method
-        List<Node> path = aIController.FindPath(startX, startY, constructor.goalRow, constructor.goalCol);
+        List<Node> path = aIController.FindPath(startY, startX, constructor.goalRow, constructor.goalCol);
 
         // Place spheres along the path
         foreach (Node node in path)
